@@ -483,7 +483,7 @@
                     
                     <h4>Escolaridade, Lazer e Temperamento</h4>
                     <div class="grid-2">
-                        <div class="form-group"><label>Tipo de institution escolar:</label><input type="text" id="hab-esc-tipo" placeholder="Creche, Pública, Particular..."></div>
+                        <div class="form-group"><label>Tipo de instituição escolar:</label><input type="text" id="hab-esc-tipo" placeholder="Creche, Pública, Particular..."></div>
                         <div class="form-group"><label>Horários que frequenta:</label><input type="text" id="hab-esc-hora" placeholder="Integral, Manhã, Tarde..."></div>
                         <div class="form-group"><label>Rendimento/Desempenho Escolar:</label><input type="text" id="hab-esc-rend" placeholder="Bom, dificuldades específicas?"></div>
                         <div class="form-group"><label>Relacionamento escolar:</label><input type="text" id="hab-esc-rel" placeholder="Como interage com colegas e professores?"></div>
@@ -678,7 +678,6 @@
                         <div class="form-group"><label>Ambiente Social e Emocional:</label><input type="text" id="av-soc" placeholder="Ambiente familiar favorável..."></div>
                         <div class="form-group"><label>Situação Vacinal:</label><input type="text" id="av-vac" placeholder="Atualizada / Necessita reforços"></div>
                         <div class="form-group"><label>Diagnósticos Patológicos (Hipotéticos ou Confirmados):</label><input type="text" id="av-pat" placeholder="Ex: IVAS, Asma controlada, Nenhum achado agudo"></div>
-                        
                         <div class="form-group"><label style="color:var(--primary);">CID-10 Principal:</label><input type="text" id="av-cid" placeholder="Ex: K59.0 - Constipação" style="border-color: var(--primary);"></div>
                     </div>
                 </section>
@@ -1136,7 +1135,8 @@
         if (event.target == modal) modal.style.display = "none";
     }
 
-    // --- O NOVO CÉREBRO DE GERAÇÃO DO S.O.A.P (FIM DOS N/I) ---
+    function verificarDNPM() { }
+
     function gerarSOAP() {
         origemSoap = 'consulta'; 
         prontuarioAberto = null; 
@@ -1466,7 +1466,8 @@
         });
     }
 
-        function buscarMeusProntuarios() {
+    // --- CÓDIGO BURLANDO O BLOQUEIO DO NGROK ---
+    function buscarMeusProntuarios() {
         let nomeAluno = localStorage.getItem('usuarioLogadoNome');
 
         if(!nomeAluno) {
@@ -1474,18 +1475,15 @@
             return;
         }
 
-        // COLOQUE AQUI O SEU LINK DO NGROK ATUAL (se a tela preta fechou, cole o novo aqui)
         const linkNgrok = 'https://jalisa-unradiative-indiscerptibly.ngrok-free.dev';
 
-        // O SEGREDO: Usamos encodeURIComponent pro espaço no nome, e o header pra pular o aviso do Ngrok!
         fetch(linkNgrok + '/api/prontuarios/listar/' + encodeURIComponent(nomeAluno), {
             method: 'GET',
             headers: {
-                'ngrok-skip-browser-warning': 'true' // Isso burla a tela de bloqueio do Ngrok!
+                'ngrok-skip-browser-warning': 'true' // Este é o "Crachá VIP" que burla a tela do Ngrok!
             }
         })
         .then(resposta => {
-            // Se o servidor responder HTML ou erro, joga pro catch
             if(!resposta.ok) throw new Error("Erro na rede");
             return resposta.json();
         })
@@ -1524,7 +1522,6 @@
         })
         .catch(erro => showToast("Erro ao buscar no banco de dados.", "danger"));
     }
-
 
     function filtrarProntuarios() {
         const textoBusca = document.getElementById('search-paciente').value.toLowerCase();
