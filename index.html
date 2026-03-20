@@ -1466,7 +1466,7 @@
         });
     }
 
-    function buscarMeusProntuarios() {
+        function buscarMeusProntuarios() {
         let nomeAluno = localStorage.getItem('usuarioLogadoNome');
 
         if(!nomeAluno) {
@@ -1474,8 +1474,21 @@
             return;
         }
 
-        fetch('https://jalisa-unradiative-indiscerptibly.ngrok-free.dev/api/prontuarios/listar/' + nomeAluno)
-        .then(resposta => resposta.json())
+        // COLOQUE AQUI O SEU LINK DO NGROK ATUAL (se a tela preta fechou, cole o novo aqui)
+        const linkNgrok = 'https://jalisa-unradiative-indiscerptibly.ngrok-free.dev';
+
+        // O SEGREDO: Usamos encodeURIComponent pro espaço no nome, e o header pra pular o aviso do Ngrok!
+        fetch(linkNgrok + '/api/prontuarios/listar/' + encodeURIComponent(nomeAluno), {
+            method: 'GET',
+            headers: {
+                'ngrok-skip-browser-warning': 'true' // Isso burla a tela de bloqueio do Ngrok!
+            }
+        })
+        .then(resposta => {
+            // Se o servidor responder HTML ou erro, joga pro catch
+            if(!resposta.ok) throw new Error("Erro na rede");
+            return resposta.json();
+        })
         .then(lista => {
             window.prontuariosSalvos = lista; 
 
@@ -1511,6 +1524,7 @@
         })
         .catch(erro => showToast("Erro ao buscar no banco de dados.", "danger"));
     }
+
 
     function filtrarProntuarios() {
         const textoBusca = document.getElementById('search-paciente').value.toLowerCase();
